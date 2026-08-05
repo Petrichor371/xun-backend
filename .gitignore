@@ -1,0 +1,12 @@
+# 依赖
+node_modules/
+
+# 本地数据（Render 会自己生成 store.json）
+data/
+
+# 密钥/本地环境（含 VAPID 私钥，切勿提交！）
+.env
+.env.*
+
+# 保留样例模板
+!.env.example

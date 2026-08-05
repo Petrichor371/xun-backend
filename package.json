@@ -1,0 +1,16 @@
+{
+  "name": "xun-companion-backend",
+  "version": "1.0.0",
+  "description": "勋 · 常驻在线后端：即使 App 关闭也能定时主动联系用户（Web Push + 定时调度）",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "web-push": "^3.6.7",
+    "dotenv": "^16.4.5"
+  }
+}

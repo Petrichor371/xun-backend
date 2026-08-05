@@ -1,0 +1,34 @@
+# Render.com 一键部署配置
+# 把 backend/ 目录推到 GitHub 后，在 Render 导入本仓库，Render 会自动读取此文件。
+# 注意：VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / AI_ENDPOINT / AI_KEY 仍需在
+#       Render 控制台手动填入（sync: false 表示不从仓库读取，避免泄露密钥）。
+services:
+  - type: web
+    name: xun-companion-backend
+    runtime: node
+    plan: free
+    region: oregon          # 可选：singapore / frankfurt 等
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        value: mailto:admin@example.com
+      - key: AI_ENDPOINT
+        sync: false
+      - key: AI_KEY
+        sync: false
+      - key: AI_MODEL
+        value: deepseek-chat
+      - key: MAX_PER_DAY
+        value: "4"
+      - key: MIN_GAP_MS
+        value: "10800000"
+      - key: TICK_PROBABILITY
+        value: "0.02"
