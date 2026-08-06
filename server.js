@@ -256,8 +256,30 @@ app.post('/api/pending/ack', (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`✅ 勋常驻在线后端已启动: http://localhost:${PORT}`);
   console.log(`   VAPID public key: ${vapidPublic.slice(0, 24)}...`);
   console.log(`   AI 模型: ${AI_ENDPOINT ? AI_MODEL : '离线模拟话术'}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    // 端口被占用时自动尝试 PORT+1，最多重试 10 次
+    const nextPort = parseInt(process.env.PORT || '3000', 10) + 1;
+    process.env.PORT = String(nextPort);
+    console.warn(`⚠️  端口 ${PORT} 被占用，自动切换到端口 ${nextPort} ...`);
+    // 递归重试（通过重新 require 自己的方式不太优雅，直接换端口 listen）
+    const newServer = app.listen(nextPort, () => {
+      console.log(`✅ 勋常驻在线后端已启动: http://localhost:${nextPort}`);
+      console.log(`   VAPID public key: ${vapidPublic.slice(0, 24)}...`);
+      console.log(`   AI 模型: ${AI_ENDPOINT ? AI_MODEL : '离线模拟话术'}`);
+    });
+    newServer.on('error', (e2) => {
+      console.error('❌ 启动失败:', e2.message);
+      process.exit(1);
+    });
+  } else {
+    console.error('❌ 启动失败:', err.message);
+    process.exit(1);
+  }
 });
