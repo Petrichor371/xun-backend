@@ -15,8 +15,8 @@ const AI_KEY = process.env.AI_KEY || '';
 const AI_MODEL = process.env.AI_MODEL || 'deepseek-chat';
 
 // ---------- VAPID ----------
-let vapidPublic = process.env.VAPID_PUBLIC_KEY || '';
-let vapidPrivate = process.env.VAPID_PRIVATE_KEY || '';
+let vapidPublic = (process.env.VAPID_PUBLIC_KEY || '').trim().replace(/=+$/, '');
+let vapidPrivate = (process.env.VAPID_PRIVATE_KEY || '').trim().replace(/=+$/, '');
 if (!vapidPublic || !vapidPrivate) {
   const keys = webpush.generateVAPIDKeys();
   vapidPublic = keys.publicKey;
